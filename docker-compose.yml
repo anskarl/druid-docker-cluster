@@ -11,6 +11,13 @@ volumes:
   minio_data: {}
 
 services: 
+
+  druid_build:
+    build: 
+      context: ./src
+      dockerfile: Dockerfile.druid
+    image: anskarl/druid:latest
+
   minio:
     image: minio/minio:RELEASE.2019-05-02T19-07-09Z
     container_name: minio
@@ -65,11 +72,11 @@ services:
       - coordinator
     environment: 
       - DRUID_SERVICE_PORT=8081
+      - DRUID_LOG_LEVEL=ERROR
     volumes:
       - coordinator_var:/opt/druid/var    
     logging:
-      driver: none
-
+      driver: json-file
 
   broker:
     container_name: broker
@@ -85,10 +92,9 @@ services:
       - broker 
     environment: 
       - DRUID_SERVICE_PORT=8092
+      - DRUID_LOG_LEVEL=ERROR
     volumes:
       - broker_var:/opt/druid/var   
-    logging:
-      driver: none
 
   historical:
     container_name: historical
@@ -104,8 +110,10 @@ services:
       - historical
     environment: 
       - DRUID_SERVICE_PORT=8083
+      - DRUID_LOG_LEVEL=INFO
     volumes:
-      - historical_var:/opt/druid/var  
+      - historical_var:/opt/druid/var
+      - ./dataset:/dataset:ro
     logging:
       driver: json-file
 
@@ -122,10 +130,12 @@ services:
       - overlord
     environment: 
       - DRUID_SERVICE_PORT=8090
+      - DRUID_LOG_LEVEL=ERROR
     volumes: 
       - overlord_var:/opt/druid/var  
+      - ./dataset:/dataset:ro
     logging:
-      driver: none
+      driver: json-file
 
   middlemanager:
     container_name: middlemanager
@@ -141,10 +151,12 @@ services:
       - middleManager
     environment: 
       - DRUID_SERVICE_PORT=8091
+      - DRUID_LOG_LEVEL=INFO
     volumes: 
-      - middle_var:/opt/druid/var    
+      - middle_var:/opt/druid/var
+      - ./dataset:/dataset:ro
     logging:
-      driver: none
+      driver: json-file
 
   router:
     container_name: router
@@ -163,25 +175,22 @@ services:
     command: router
     environment: 
       - DRUID_SERVICE_PORT=8888
+      - DRUID_LOG_LEVEL=ERROR
     volumes: 
       - router_var:/opt/druid/var      
     logging:
-      driver: none
-
+      driver: json-file
 
   createbuckets:
-    image: minio/mc
+    build:
+      dockerfile: Dockerfile.init_deep_storage
+      context: ./src
     depends_on:
       - minio
     links:
       - minio  
-    entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc config host add deep_storage http://minio:9000 DRUIDDEEPSTORASGEACCESSKEY DRUIDDEEPSTORASGESECRETKEY;
-      /usr/bin/mc rm -r --force deep_storage/storage;
-      /usr/bin/mc mb deep_storage/storage;
-      /usr/bin/mc policy download deep_storage/storage;
-      /usr/bin/mc policy upload deep_storage/storage;
-      exit 0;
-      "
-    
+    environment:
+      - MINIO_ACCESS_KEY=DRUIDDEEPSTORASGEACCESSKEY
+      - MINIO_SECRET_KEY=DRUIDDEEPSTORASGESECRETKEY
+    logging:
+      driver: json-file

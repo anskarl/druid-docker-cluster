@@ -1,0 +1,34 @@
+FROM openjdk:8-jre-alpine
+LABEL maintainer="Anastasios Skarlatidis"
+
+ENV LANG C.UTF-8
+ENV DRUID_VERSION '0.14.0-incubating'
+
+RUN wget -q -O - \
+  "https://archive.apache.org/dist/incubator/druid/${DRUID_VERSION}/apache-druid-${DRUID_VERSION}-bin.tar.gz" | gunzip | tar x -C /opt \
+  && ln -s /opt/apache-druid-$DRUID_VERSION /opt/druid \
+  && mkdir -p /tmp/druid
+
+RUN apk add --no-cache bash
+RUN mkdir -p /opt/druid/var/tmp /opt/druid/var/druid/segments /opt/druid/var/druid/indexing-logs /opt/druid/var/druid/task /opt/druid/var/druid/hadoop-tmp /opt/druid/var/druid/segment-cache  
+
+ENV DRUID_HOME="/opt/apache-druid-$DRUID_VERSION"
+
+RUN addgroup --gid 1000 druid \
+  && adduser --home /opt/apache-druid-$DRUID_VERSION --shell /bin/sh --no-create-home --uid 1000 --gecos '' --ingroup druid --disabled-password druid \
+  && mkdir -p /opt/apache-druid-$DRUID_VERSION/var \
+  && chown -R druid:druid /opt/apache-druid-$DRUID_VERSION \
+  && chmod -R 775 /opt/apache-druid-$DRUID_VERSION
+
+COPY druid-entrypoint.sh /opt/druid/druid-entrypoint.sh
+COPY wait-for /opt/wait-for
+COPY log4j2.xml /opt/druid/conf/druid/_common/
+
+RUN chmod +x /opt/druid/druid-entrypoint.sh
+RUN chmod +x /opt/wait-for
+
+USER druid
+
+WORKDIR /opt/apache-druid-$DRUID_VERSION
+
+ENTRYPOINT ["/opt/druid/druid-entrypoint.sh"]

@@ -1,0 +1,10 @@
+FROM minio/mc
+LABEL maintainer="Anastasios Skarlatidis"
+
+COPY wait-for /wait-for
+RUN chmod +x /wait-for
+
+COPY init_deep_storage.sh /init_deep_storage.sh
+RUN chmod +x /init_deep_storage.sh
+
+ENTRYPOINT [ "/init_deep_storage.sh" ]

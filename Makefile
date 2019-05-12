@@ -3,7 +3,7 @@ LATEST_TAG=anskarl/druid:latest
 
 image:
 	@echo "Creating image with tags '$(VER_TAG)' and '$(LATEST_TAG)'"
-	docker build -t $(VER_TAG) . 
+	docker build -t $(VER_TAG) -f ./src/Dockerfile.druid ./src
 	docker tag $(VER_TAG) $(LATEST_TAG)
 
 push:

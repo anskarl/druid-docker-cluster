@@ -1,0 +1,113 @@
+{
+    "type" : "index",
+    "spec" : {
+      "dataSchema" : {
+        "dataSource" : "yellow_tripdata",
+        "parser" : {
+          "type" : "string",
+          "parseSpec" : {
+            "format" : "csv",
+            "columns": [
+              "VendorID", 
+              "tpep_pickup_datetime", 
+              "tpep_dropoff_datetime", 
+              "passenger_count", 
+              "trip_distance", 
+              "pickup_longitude", 
+              "pickup_latitude", 
+              "RateCodeID", 
+              "store_and_fwd_flag", 
+              "dropoff_longitude", 
+              "dropoff_latitude", 
+              "payment_type", 
+              "fare_amount", 
+              "extra", 
+              "mta_tax", 
+              "tip_amount", 
+              "tolls_amount", 
+              "improvement_surcharge", 
+              "total_amount", 
+              "pickup_coordinates", 
+              "dropoff_coordinates" 
+            ],
+            "dimensionsSpec" : {
+              "dimensions" : [
+                { "name" :"VendorID", "type": "long" },
+                { "name": "tpep_pickup_datetime", "type": "extraction", "outputType": "long", "extractionFn": { "type" : "timeFormat" } },
+                { "name": "tpep_dropoff_datetime", "type": "extraction", "outputType": "long",  "extractionFn": { "type" : "timeFormat" }},
+                { "name": "passenger_count", "type": "long"},
+                { "name": "trip_distance", "type": "float"},
+                { "name": "RateCodeID", "type": "long" },
+                { "name": "store_and_fwd_flag", "type": "string"},
+                { "name": "payment_type", "type": "long" },
+                { "name": "fare_amount", "type": "float"},
+                { "name": "extra", "type": "float"},
+                { "name": "mta_tax", "type": "float"},
+                { "name": "tip_amount", "type": "float"},
+                { "name": "tolls_amount", "type": "float"},
+                { "name": "improvement_surcharge", "type": "float"},
+                { "name": "total_amount", "type": "float"}
+              ],
+              "spatialDimensions": [
+                {
+                  "dimName": "pickup_coordinates",
+                  "dims": ["pickup_latitude", "pickup_longitude"]
+                },
+                {
+                  "dimName": "dropoff_coordinates",
+                  "dims": ["dropoff_latitude", "dropoff_longitude"]
+                }
+              ]
+            },
+            "timestampSpec": {
+              "column": "tpep_pickup_datetime",
+              "format": "auto"
+            }
+          }
+        },
+        "metricsSpec" : [
+          {
+            "type": "count",
+            "name": "c"
+          },
+          {
+            "type": "doubleSum",
+            "name": "fare_amount_sum_metric",
+            "fieldName": "fare_amount"
+          },
+          {
+            "type": "doubleSum",
+            "name": "tip_amount_sum_metric",
+            "fieldName": "tip_amount"
+          },
+          {
+            "type": "doubleSum",
+            "name": "total_amount_sum_metric",
+            "fieldName": "total_amount"
+          }
+        ],
+        "granularitySpec" : {
+          "type" : "uniform",
+          "segmentGranularity" : "day",
+          "queryGranularity" : "day",
+          "intervals" : ["2015-01-01/2016-01-01"],
+          "rollup" : true
+        }
+      },
+      "ioConfig" : {
+        "type" : "index",
+        "firehose" : {
+          "type" : "local",
+          "baseDir" : "/dataset",
+          "filter" : "yellow_trip_data-sample.csv.gz"
+        },
+        "appendToExisting" : false
+      },
+      "tuningConfig" : {
+        "type" : "index",
+        "maxRowsPerSegment" : 5000000,
+        "maxRowsInMemory" : 25000,
+        "forceExtendableShardSpecs" : true
+      }
+    }
+  }
