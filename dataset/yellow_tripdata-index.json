@@ -88,7 +88,7 @@
         ],
         "granularitySpec" : {
           "type" : "uniform",
-          "segmentGranularity" : "day",
+          "segmentGranularity" : "year",
           "queryGranularity" : "day",
           "intervals" : ["2015-01-01/2016-01-01"],
           "rollup" : true
