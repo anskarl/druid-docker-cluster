@@ -1,4 +1,4 @@
-# Example Apache Druid cluster
+# Dockerised Apache Druid cluster
 
 This project demostrates how you can setup a Dockerized example/development [Apache Druid](http://druid.io/) cluster.
 
@@ -49,7 +49,8 @@ After a while the Druid console should be available in [http://localhost:8888](h
 For example data we are using a subset of the [NYC Taxi & Limousine Commission - Trip Record Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page), specifically from months 2015-01 to 2015-03.
 
 ```
-./dataset/03-load_to_druid.sh
+cd dataset
+./03-load_to_druid.sh
 ```
 
 Please note that you can download data for different months and adjust the sample size by adjusting the parameters of `./dataset/01-download.sh` and `./dataset/02-create_sample_tripdata.sh`.

@@ -21,6 +21,14 @@ services:
   minio:
     image: minio/minio:RELEASE.2019-05-02T19-07-09Z
     container_name: minio
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
     ports: 
       - "9000:9000"
     environment:
@@ -35,6 +43,14 @@ services:
   postgres:
     image: postgres:9.6-alpine
     container_name: postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
     ports:
       - "5432:5432"
     environment:
@@ -49,7 +65,14 @@ services:
   zookeeper:
     container_name: zookeeper
     image: zookeeper:3.5
-    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
     ports:
       - "2181:2181"
       - "2888:2888"
@@ -62,6 +85,14 @@ services:
   coordinator:
     container_name: coordinator
     image: anskarl/druid:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
     depends_on: 
       - minio
       - zookeeper
@@ -81,6 +112,14 @@ services:
   broker:
     container_name: broker
     image: anskarl/druid:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 512M
     depends_on: 
       - minio
       - zookeeper
@@ -99,6 +138,14 @@ services:
   historical:
     container_name: historical
     image: anskarl/druid:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '2'
+          memory: 3G
     depends_on:
       - minio
       - zookeeper
@@ -120,6 +167,14 @@ services:
   overlord:
     container_name: overlord
     image: anskarl/druid:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
     depends_on:
       - minio
       - zookeeper
@@ -140,6 +195,14 @@ services:
   middlemanager:
     container_name: middlemanager
     image: anskarl/druid:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
     depends_on:
       - minio
       - zookeeper
@@ -161,6 +224,14 @@ services:
   router:
     container_name: router
     image: anskarl/druid:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 768M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
     depends_on:
       - minio
       - zookeeper
