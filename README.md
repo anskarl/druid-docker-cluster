@@ -29,6 +29,18 @@ or by using docker-compose
 docker-compose build
 ```
 
+You can also specify the version of Druid to build, for example:
+
+```
+make DRUID_VERSION=0.14.1-incubating image
+```
+
+or by using docker-compose
+
+```
+docker-compose build --build-arg ARG_DRUID_VERSION=0.14.1-incubating
+```
+
 ### Run the cluster
 
 ```

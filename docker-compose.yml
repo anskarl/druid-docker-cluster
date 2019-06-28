@@ -16,9 +16,12 @@ services:
     build: 
       context: ./src
       dockerfile: Dockerfile.druid
+      args: 
+        - ARG_DRUID_VERSION=0.14.2-incubating
     image: anskarl/druid:latest
     environment: 
       - DRUID_SERVICE_PORT=8888
+      
 
   minio:
     image: minio/minio:RELEASE.2019-05-02T19-07-09Z

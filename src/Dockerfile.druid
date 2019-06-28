@@ -1,8 +1,12 @@
 FROM openjdk:8u212-jre-alpine
 LABEL maintainer="Anastasios Skarlatidis"
 
+ARG ARG_DRUID_VERSION
+
 ENV LANG C.UTF-8
-ENV DRUID_VERSION '0.14.1-incubating'
+ENV DRUID_VERSION=$ARG_DRUID_VERSION
+
+RUN echo "=== Apache Druid: $DRUID_VERSION ==="
 
 RUN wget -q -O - \
   "https://archive.apache.org/dist/incubator/druid/${DRUID_VERSION}/apache-druid-${DRUID_VERSION}-bin.tar.gz" | gunzip | tar x -C /opt \
