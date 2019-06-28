@@ -1,4 +1,4 @@
-VER_TAG=anskarl/druid:0.14.0-incubating
+VER_TAG=anskarl/druid:0.14.1-incubating
 LATEST_TAG=anskarl/druid:latest
 
 image:
