@@ -1,4 +1,4 @@
-# Dockerised Apache Druid cluster
+# Dockerized Apache Druid cluster
 
 This project demostrates how you can setup a Dockerized example/development [Apache Druid](http://druid.io/) cluster.
 
