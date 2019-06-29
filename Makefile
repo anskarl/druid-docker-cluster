@@ -1,4 +1,4 @@
-DRUID_VERSION ?= 0.14.2-incubating
+DRUID_VERSION ?= 0.15.0-incubating
 VER_TAG=anskarl/druid:$(DRUID_VERSION)
 LATEST_TAG=anskarl/druid:latest
 

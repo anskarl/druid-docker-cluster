@@ -87,6 +87,8 @@ LOG_LEVEL=${DRUID_LOG_LEVEL} java -server \
     -Xms${MEMORY_XMS} \
     -Xmx${MEMORY_XMX} \
     -XX:MaxDirectMemorySize=${MEMORY_MAX_DIRECT_SIZE} \
+    -Ddruid.zk.paths.base="/druid" \
+    -Ddruid.service=${DRUID_SERVICE} \
     -Ddruid.plaintextPort=${DRUID_SERVICE_PORT} \
     -Duser.timezone=${JVM_TIMEZONE} \
     -Dfile.encoding=UTF-8 \
@@ -118,5 +120,6 @@ LOG_LEVEL=${DRUID_LOG_LEVEL} java -server \
     -Ddruid.emitter.logging.logLevel=error \
     -Ddruid.sql.enable="${DRUID_SQL_ENABLE}" \
     -Ddruid.processing.numThreads="${DRUID_PROCESSING_NUM_THREAD}" \
+    -Ddruid.router.managementProxy.enabled=true \
     -cp "${DRUID_HOME}/conf/druid/_common:${DRUID_HOME}/conf/druid/${SERVICE_NAME}:${DRUID_HOME}/lib/*" \
     org.apache.druid.cli.Main server $@
