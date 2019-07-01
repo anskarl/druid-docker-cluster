@@ -87,6 +87,7 @@ LOG_LEVEL=${DRUID_LOG_LEVEL} java -server \
     -Xms${MEMORY_XMS} \
     -Xmx${MEMORY_XMX} \
     -XX:MaxDirectMemorySize=${MEMORY_MAX_DIRECT_SIZE} \
+    -XX:+UseG1GC \
     -Ddruid.zk.paths.base="/druid" \
     -Ddruid.service=${DRUID_SERVICE} \
     -Ddruid.plaintextPort=${DRUID_SERVICE_PORT} \

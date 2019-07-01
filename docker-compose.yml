@@ -29,8 +29,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: 1G
+          cpus: '0.5'
+          memory: 512M
         reservations:
           cpus: '0.25'
           memory: 256M
@@ -51,10 +51,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
+          cpus: '1'
           memory: 1G
         reservations:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512M
     ports:
       - "5432:5432"
@@ -73,8 +73,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 1G
+          cpus: '0.5'
+          memory: 512M
         reservations:
           cpus: '0.5'
           memory: 512M
@@ -94,9 +94,9 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 1G
+          memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512M
     depends_on: 
       - minio
@@ -120,10 +120,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 2G
+          cpus: '1'
+          memory: 1G
         reservations:
-          cpus: '1.0'
+          cpus: '1'
           memory: 512M
     depends_on: 
       - minio
@@ -137,6 +137,7 @@ services:
     environment: 
       - DRUID_SERVICE_PORT=8092
       - DRUID_LOG_LEVEL=ERROR
+      - MEMORY_MAX_DIRECT_SIZE=768m
     volumes:
       - broker_var:/opt/druid/var   
 
@@ -147,10 +148,10 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 4G
+          memory: 1G
         reservations:
           cpus: '2'
-          memory: 3G
+          memory: 1G
     depends_on:
       - minio
       - zookeeper
@@ -163,6 +164,7 @@ services:
     environment: 
       - DRUID_SERVICE_PORT=8083
       - DRUID_LOG_LEVEL=INFO
+      - MEMORY_MAX_DIRECT_SIZE=1280m
     volumes:
       - historical_var:/opt/druid/var
       - ./dataset:/dataset:ro
@@ -176,9 +178,9 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 1G
+          memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512M
     depends_on:
       - minio
@@ -203,11 +205,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 4G
+          cpus: '1'
+          memory: 512M
         reservations:
           cpus: '1'
-          memory: 2G
+          memory: 256M
     depends_on:
       - minio
       - zookeeper
@@ -232,11 +234,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 768M
+          cpus: '1'
+          memory: 256M
         reservations:
-          cpus: '0.25'
-          memory: 512M
+          cpus: '1'
+          memory: 256M
     depends_on:
       - minio
       - zookeeper
