@@ -1,3 +1,4 @@
 *_tripdata_2015-*.csv.gz
 *ignore*
 .DS_Store
+.idea

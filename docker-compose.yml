@@ -17,8 +17,8 @@ services:
       context: ./src
       dockerfile: Dockerfile.druid
       args: 
-        - ARG_DRUID_VERSION=0.15.0-incubating
-    image: anskarl/druid:latest
+        - ARG_DRUID_VERSION=0.16.1-incubating
+    image: anskarl/druid:0.16.1-incubating
     environment: 
       - DRUID_SERVICE_PORT=8888
       
@@ -29,10 +29,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512M
         reservations:
-          cpus: '0.25'
+          cpus: '0.5'
           memory: 256M
     ports: 
       - "9000:9000"
@@ -73,10 +73,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512M
     ports:
       - "2181:2181"
@@ -148,7 +148,7 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 1G
+          memory: 2G
         reservations:
           cpus: '2'
           memory: 1G
@@ -205,10 +205,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 512M
+          cpus: '2'
+          memory: 1G
         reservations:
-          cpus: '1'
+          cpus: '2'
           memory: 256M
     depends_on:
       - minio
@@ -259,7 +259,8 @@ services:
     logging:
       driver: json-file
 
-  createbuckets:
+
+  create_buckets:
     build:
       dockerfile: Dockerfile.init_deep_storage
       context: ./src
